@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEET Biology Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: white;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 700;
+        }
+
+        /* TOPIC SELECTION PAGE */
+        .topic-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .topic-card {
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .topic-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .topic-card.biotech {
+            background: #22c55e;
+        }
+
+        .topic-card.molecular {
+            background: #3b82f6;
+        }
+
+        .topic-card.cell {
+            background: #ec4899;
+        }
+
+        .topic-card h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .topic-card p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* QUESTION COUNT SELECTION */
+        .count-selection {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .count-selection h2 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .count-options {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .count-btn {
+            padding: 2rem 3rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: 3px solid #333;
+            background: white;
+            color: #333;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .count-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .count-btn.biotech-theme:hover {
+            background: #22c55e;
+            color: white;
+            border-color: #22c55e;
+        }
+
+        .count-btn.molecular-theme:hover {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .count-btn.cell-theme:hover {
+            background: #ec4899;
+            color: white;
+            border-color: #ec4899;
+        }
+
+        .back-btn {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            background: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #4b5563;
+        }
+
+        /* QUIZ SECTION */
+        .quiz-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            background: #f3f4f6;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .quiz-info {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .score-display {
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .question-card {
+            background: #f9fafb;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .question-number {
+            font-size: 1rem;
+            color: #6b7280;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            color: #1f2937;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option {
+            padding: 1.25rem 1.5rem;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .option:hover {
+            border-color: #9ca3af;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .option.correct {
+            background: #22c55e !important;
+            color: white !important;
+            border-color: #22c55e !important;
+        }
+
+        .option.incorrect {
+            background: #ef4444 !important;
+            color: white !important;
+            border-color: #ef4444 !important;
+        }
+
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .explanation {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: #fff7ed;
+            border-left: 4px solid #f59e0b;
+            border-radius: 8px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .explanation strong {
+            color: #ea580c;
+        }
+
+        .quiz-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .btn-submit:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .btn-next {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn-next:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+        }
+
+        /* RESULTS PAGE */
+        .results-container {
+            text-align: center;
+            padding: 3rem;
+            background: #f9fafb;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .results-container h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .final-score {
+            font-size: 4rem;
+            font-weight: 700;
+            margin: 2rem 0;
+        }
+
+        .final-score.excellent {
+            color: #22c55e;
+        }
+
+        .final-score.good {
+            color: #3b82f6;
+        }
+
+        .final-score.average {
+            color: #f59e0b;
+        }
+
+        .final-score.poor {
+            color: #ef4444;
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .score-item {
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .score-item h3 {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-item p {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .result-message {
+            font-size: 1.2rem;
+            color: #4b5563;
+            margin: 2rem 0;
+            line-height: 1.6;
+        }
+
+        .btn-restart {
+            background: #3b82f6;
+            color: white;
+            padding: 1.25rem 3rem;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .btn-restart:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .time-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #e5e7eb;
+        }
+
+        .time-item.fastest {
+            border-left-color: #22c55e;
+            background: #f0fdf4;
+        }
+
+        .time-item.slowest {
+            border-left-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .time-item-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            color: #4b5563;
+        }
+
+        .time-item-value {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .topic-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .count-options {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .question-card {
+                padding: 1.5rem;
+            }
+
+            .question-text {
+                font-size: 1.2rem;
+            }
+
+            .quiz-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- TOPIC SELECTION PAGE -->
+        <div id="topicPage">
+            <h1>NEET Biology Quiz</h1>
+            <div class="topic-selection">
+                <div class="topic-card biotech" onclick="selectTopic('biotech')">
+                    <h2>Biotech Questions</h2>
+                    <p>Biotechnology: Principles & Applications</p>
+                </div>
+                <div class="topic-card molecular" onclick="selectTopic('molecular')">
+                    <h2>Molecular Biology Questions</h2>
+                    <p>Molecular Basis of Inheritance</p>
+                </div>
+                <div class="topic-card cell" onclick="selectTopic('cell')">
+                    <h2>Cell Questions</h2>
+                    <p>Cell: Unit of Life & Cell Division</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUESTION COUNT SELECTION PAGE -->
+        <div id="countPage" class="count-selection hidden">
+            <h2>Select Number of Questions</h2>
+            <div class="count-options">
+                <button class="count-btn" onclick="selectQuestionCount(10)">10 Questions</button>
+                <button class="count-btn" onclick="selectQuestionCount(15)">15 Questions</button>
+                <button class="count-btn" onclick="selectQuestionCount(25)">25 Questions</button>
+            </div>
+            <center><button class="back-btn" onclick="backToTopics()">← Back to Topics</button></center>
+        </div>
+
+        <!-- TIMER SELECTION PAGE -->
+        <div id="timerPage" class="count-selection hidden">
+            <h2>Select Time Limit</h2>
+            <div class="count-options">
+                <button class="count-btn" onclick="startQuiz(10)">10 Minutes</button>
+                <button class="count-btn" onclick="startQuiz(15)">15 Minutes</button>
+                <button class="count-btn" onclick="startQuiz(25)">25 Minutes</button>
+                <button class="count-btn" onclick="startQuiz(50)">50 Minutes</button>
+            </div>
+            <center><button class="back-btn" onclick="backToQuestionCount()">← Back</button></center>
+        </div>
+
+        <!-- QUIZ PAGE -->
+        <div id="quizPage" class="hidden">
+            <div class="quiz-container">
+                <div class="quiz-header">
+                    <div class="quiz-info">
+                        <span>Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span></span>
+                    </div>
+                    <div class="timer-display" id="timerDisplay">
+                        <span style="font-size: 1.2rem; font-weight: 700; color: #ef4444;">⏱️ <span id="timeLeft">10:00</span></span>
+                    </div>
+                    <div class="score-display">
+                        Score: <span id="currentScore">0</span>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-number" id="questionNumber">Question 1</div>
+                    <div class="question-text" id="questionText"></div>
+                    <div class="options" id="optionsContainer"></div>
+                    <div id="explanation" class="explanation hidden"></div>
+                    <div class="quiz-buttons">
+                        <button class="btn btn-submit" id="submitBtn" disabled>Submit Answer</button>
+                        <button class="btn btn-next hidden" id="nextBtn">Next Question →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULTS PAGE -->
+        <div id="resultsPage" class="hidden">
+            <div class="results-container">
+                <h2>Quiz Complete! 🎉</h2>
+                <div class="final-score" id="finalScore">0</div>
+                
+                <!-- Pie Chart -->
+                <div style="max-width: 300px; margin: 2rem auto;">
+                    <canvas id="resultsChart"></canvas>
+                </div>
+                
+                <div class="score-breakdown">
+                    <div class="score-item">
+                        <h3>Correct Answers</h3>
+                        <p id="correctCount" style="color: #22c55e;">0</p>
+                    </div>
+                    <div class="score-item">
+                        <h3>Incorrect Answers</h3>
+                        <p id="incorrectCount" style="color: #ef4444;">0</p>
+                    </div>
+                    <div class="score-item">
+                        <h3>Total Questions</h3>
+                        <p id="totalQuestionsResult">0</p>
+                    </div>
+                </div>
+
+                <!-- Time Statistics -->
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin: 2rem 0; box-shadow: 0 5px 20px rgba(0,0,0,0.08);">
+                    <h3 style="color: #333; margin-bottom: 1.5rem; font-size: 1.5rem;">⏱️ Time Analysis</h3>
+                    <div class="score-breakdown" style="margin-bottom: 1.5rem;">
+                        <div class="score-item">
+                            <h3>Total Time</h3>
+                            <p id="totalTime" style="color: #3b82f6;">0:00</p>
+                        </div>
+                        <div class="score-item">
+                            <h3>Average Time</h3>
+                            <p id="avgTime" style="color: #3b82f6;">0 sec</p>
+                        </div>
+                        <div class="score-item">
+                            <h3>Fastest Question</h3>
+                            <p id="fastestTime" style="color: #22c55e;">0 sec</p>
+                        </div>
+                        <div class="score-item">
+                            <h3>Slowest Question</h3>
+                            <p id="slowestTime" style="color: #f59e0b;">0 sec</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Detailed question times -->
+                    <div id="questionTimesDetail" style="max-height: 300px; overflow-y: auto; margin-top: 1rem;">
+                        <h4 style="color: #6b7280; margin-bottom: 1rem; font-size: 1rem;">Time per Question:</h4>
+                        <div id="timesList"></div>
+                    </div>
+                </div>
+
+                <p class="result-message" id="resultMessage"></p>
+                <button class="btn btn-restart" onclick="restartQuiz()">Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Quiz Data
+        const quizData = {
+            biotech: [
+                {
+                    question: "Which enzyme is commonly used to cut DNA at specific recognition sites in recombinant DNA technology?",
+                    options: ["DNA ligase", "Restriction endonuclease", "DNA polymerase", "Helicase"],
+                    correct: 1,
+                    explanation: "Restriction endonucleases are molecular scissors that cut DNA at specific palindromic sequences. They are essential for genetic engineering."
+                },
+                {
+                    question: "What is the primary function of the Ti plasmid from Agrobacterium tumefaciens?",
+                    options: ["Acts as a selectable marker", "Serves as a cloning vector for plant transformation", "Amplifies DNA sequences", "Synthesizes proteins"],
+                    correct: 1,
+                    explanation: "Ti plasmid naturally transfers DNA into plant cells, making it ideal for plant genetic engineering."
+                },
+                {
+                    question: "Which of the following is NOT a step in Polymerase Chain Reaction (PCR)?",
+                    options: ["Denaturation at 94-96°C", "Annealing at 50-65°C", "Ligation by DNA ligase", "Extension at 72°C"],
+                    correct: 2,
+                    explanation: "PCR involves denaturation, annealing, and extension. Ligation is not part of PCR."
+                },
+                {
+                    question: "EcoRI produces which type of DNA ends?",
+                    options: ["Blunt ends", "Sticky ends with 5' overhang", "Sticky ends with 3' overhang", "Circular ends"],
+                    correct: 1,
+                    explanation: "EcoRI produces sticky (cohesive) ends with 5' overhangs by making staggered cuts."
+                },
+                {
+                    question: "The first recombinant DNA vaccine for humans was against:",
+                    options: ["Hepatitis A", "Hepatitis B", "Polio", "Measles"],
+                    correct: 1,
+                    explanation: "Hepatitis B vaccine was the first recombinant DNA vaccine, containing HBsAg produced in yeast."
+                },
+                {
+                    question: "In gel electrophoresis, DNA fragments migrate towards:",
+                    options: ["Negative electrode", "Positive electrode", "Both electrodes", "They don't migrate"],
+                    correct: 1,
+                    explanation: "DNA is negatively charged and migrates toward the positive electrode (anode)."
+                },
+                {
+                    question: "What was the first genetically modified crop approved for human consumption?",
+                    options: ["Bt cotton", "Golden rice", "Flavr Savr tomato", "Roundup Ready soybean"],
+                    correct: 2,
+                    explanation: "Flavr Savr tomato (1994) was engineered for delayed ripening and longer shelf life."
+                },
+                {
+                    question: "Which organism provides the thermostable DNA polymerase used in PCR?",
+                    options: ["E. coli", "Bacillus subtilis", "Thermus aquaticus", "Saccharomyces cerevisiae"],
+                    correct: 2,
+                    explanation: "Taq polymerase from Thermus aquaticus remains stable at high PCR temperatures."
+                },
+                {
+                    question: "Southern blotting is used to detect:",
+                    options: ["DNA sequences", "RNA sequences", "Proteins", "Carbohydrates"],
+                    correct: 0,
+                    explanation: "Southern blotting detects specific DNA sequences after electrophoresis separation."
+                },
+                {
+                    question: "Cry proteins from Bacillus thuringiensis are toxic to:",
+                    options: ["Humans", "Birds", "Insect larvae", "Mammals"],
+                    correct: 2,
+                    explanation: "Cry proteins are insecticidal, specifically targeting insect larvae by creating pores in their gut."
+                },
+                {
+                    question: "Which vector is most commonly used for cloning in E. coli?",
+                    options: ["Lambda phage", "Plasmids", "Cosmids", "YACs"],
+                    correct: 1,
+                    explanation: "Plasmids are circular DNA molecules commonly used as cloning vectors in bacteria."
+                },
+                {
+                    question: "The technique used to introduce foreign DNA into animal cells is called:",
+                    options: ["Transformation", "Microinjection", "Conjugation", "Transduction"],
+                    correct: 1,
+                    explanation: "Microinjection directly injects DNA into animal cell nucleus using fine needles."
+                },
+                {
+                    question: "What is the role of DNA ligase in recombinant DNA technology?",
+                    options: ["Cuts DNA", "Joins DNA fragments", "Amplifies DNA", "Denatures DNA"],
+                    correct: 1,
+                    explanation: "DNA ligase seals the phosphodiester bonds between DNA fragments."
+                },
+                {
+                    question: "Insulin produced through genetic engineering uses which host organism?",
+                    options: ["E. coli", "Yeast", "Both E. coli and yeast", "Animal cells"],
+                    correct: 2,
+                    explanation: "Both E. coli and yeast are used to produce recombinant human insulin."
+                },
+                {
+                    question: "Golden Rice is genetically modified to produce:",
+                    options: ["Vitamin A", "Vitamin C", "Iron", "Protein"],
+                    correct: 0,
+                    explanation: "Golden Rice contains beta-carotene (precursor to Vitamin A) to combat deficiency."
+                },
+                {
+                    question: "What is the significance of antibiotic resistance genes in plasmid vectors?",
+                    options: ["They help in DNA replication", "They act as selectable markers", "They increase transformation efficiency", "They stabilize DNA"],
+                    correct: 1,
+                    explanation: "Antibiotic resistance genes serve as selectable markers to identify transformed cells."
+                },
+                {
+                    question: "The enzyme used to synthesize cDNA from mRNA is:",
+                    options: ["DNA polymerase", "RNA polymerase", "Reverse transcriptase", "Helicase"],
+                    correct: 2,
+                    explanation: "Reverse transcriptase synthesizes complementary DNA (cDNA) from RNA template."
+                },
+                {
+                    question: "Bt cotton is resistant to:",
+                    options: ["Bacterial diseases", "Viral diseases", "Insect pests", "Fungal infections"],
+                    correct: 2,
+                    explanation: "Bt cotton produces Cry proteins that protect against bollworm and other insect pests."
+                },
+                {
+                    question: "The term 'chimeric DNA' refers to:",
+                    options: ["Mutated DNA", "Recombinant DNA from different sources", "Damaged DNA", "Circular DNA"],
+                    correct: 1,
+                    explanation: "Chimeric DNA contains sequences from different organisms, also called recombinant DNA."
+                },
+                {
+                    question: "Which technique is used for early detection of AIDS?",
+                    options: ["ELISA", "PCR", "Both ELISA and PCR", "Western blotting"],
+                    correct: 2,
+                    explanation: "Both ELISA (detects antibodies) and PCR (detects viral DNA) are used for AIDS detection."
+                },
+                {
+                    question: "Biolistics or gene gun method is used for:",
+                    options: ["Animal cell transformation", "Plant cell transformation", "Bacterial transformation", "Viral transformation"],
+                    correct: 1,
+                    explanation: "Biolistics shoots DNA-coated metal particles into plant cells for transformation."
+                },
+                {
+                    question: "The recognition sequence for restriction enzymes is:",
+                    options: ["Random", "Palindromic", "Always 6 base pairs", "Single-stranded"],
+                    correct: 1,
+                    explanation: "Restriction enzymes recognize palindromic sequences (same when read forward and backward)."
+                },
+                {
+                    question: "Bioreactors are used for:",
+                    options: ["DNA sequencing", "Large-scale production of products", "Gene cloning", "PCR amplification"],
+                    correct: 1,
+                    explanation: "Bioreactors provide controlled conditions for large-scale cultivation and product synthesis."
+                },
+                {
+                    question: "The first clinical gene therapy was done for the treatment of:",
+                    options: ["Cystic fibrosis", "Sickle cell anemia", "ADA deficiency", "Hemophilia"],
+                    correct: 2,
+                    explanation: "First gene therapy (1990) treated ADA-SCID by introducing functional ADA gene."
+                },
+                {
+                    question: "RNA interference (RNAi) is used for:",
+                    options: ["Gene amplification", "Gene silencing", "Gene mutation", "Gene editing"],
+                    correct: 1,
+                    explanation: "RNAi silences specific genes by degrading target mRNA using complementary RNA."
+                }
+            ],
+            molecular: [
+                {
+                    question: "The genetic material in most organisms is:",
+                    options: ["DNA", "RNA", "Protein", "Carbohydrate"],
+                    correct: 0,
+                    explanation: "DNA is the genetic material in most organisms except some viruses that use RNA."
+                },
+                {
+                    question: "Who discovered the double helix structure of DNA?",
+                    options: ["Watson and Crick", "Hershey and Chase", "Griffith", "Avery, MacLeod and McCarty"],
+                    correct: 0,
+                    explanation: "James Watson and Francis Crick discovered DNA's double helix structure in 1953."
+                },
+                {
+                    question: "Which experiment proved that DNA is the genetic material?",
+                    options: ["Griffith's experiment", "Hershey-Chase experiment", "Meselson-Stahl experiment", "Avery's experiment"],
+                    correct: 1,
+                    explanation: "Hershey-Chase used radioactive labeling to prove DNA, not protein, is genetic material."
+                },
+                {
+                    question: "The process of copying genetic information from DNA to RNA is called:",
+                    options: ["Replication", "Transcription", "Translation", "Transformation"],
+                    correct: 1,
+                    explanation: "Transcription synthesizes RNA from DNA template using RNA polymerase."
+                },
+                {
+                    question: "Which enzyme is responsible for DNA replication?",
+                    options: ["RNA polymerase", "DNA polymerase", "Helicase", "Ligase"],
+                    correct: 1,
+                    explanation: "DNA polymerase synthesizes new DNA strands complementary to template."
+                },
+                {
+                    question: "The central dogma of molecular biology describes:",
+                    options: ["DNA → RNA → Protein", "Protein → RNA → DNA", "RNA → DNA → Protein", "DNA → Protein → RNA"],
+                    correct: 0,
+                    explanation: "Central dogma: genetic information flows from DNA to RNA to protein."
+                },
+                {
+                    question: "A codon consists of how many nucleotides?",
+                    options: ["2", "3", "4", "5"],
+                    correct: 1,
+                    explanation: "Each codon is a triplet of three nucleotides that codes for one amino acid."
+                },
+                {
+                    question: "The start codon for protein synthesis is:",
+                    options: ["UAA", "UAG", "AUG", "UGA"],
+                    correct: 2,
+                    explanation: "AUG is the start codon that codes for methionine and initiates translation."
+                },
+                {
+                    question: "Which of the following is a stop codon?",
+                    options: ["AUG", "UAA", "GUG", "CUG"],
+                    correct: 1,
+                    explanation: "UAA, UAG, and UGA are stop codons that terminate protein synthesis."
+                },
+                {
+                    question: "DNA replication is:",
+                    options: ["Conservative", "Semi-conservative", "Dispersive", "Random"],
+                    correct: 1,
+                    explanation: "Meselson-Stahl proved DNA replication is semi-conservative (each strand serves as template)."
+                },
+                {
+                    question: "The enzyme that unwinds DNA helix during replication is:",
+                    options: ["DNA polymerase", "Helicase", "Ligase", "Primase"],
+                    correct: 1,
+                    explanation: "Helicase breaks hydrogen bonds to unwind the DNA double helix."
+                },
+                {
+                    question: "RNA polymerase binds to which region to initiate transcription?",
+                    options: ["Promoter", "Operator", "Terminator", "Enhancer"],
+                    correct: 0,
+                    explanation: "RNA polymerase binds to the promoter region to start transcription."
+                },
+                {
+                    question: "The process of protein synthesis is called:",
+                    options: ["Replication", "Transcription", "Translation", "Transformation"],
+                    correct: 2,
+                    explanation: "Translation is the synthesis of proteins from mRNA on ribosomes."
+                },
+                {
+                    question: "Which RNA carries amino acids to ribosomes?",
+                    options: ["mRNA", "rRNA", "tRNA", "snRNA"],
+                    correct: 2,
+                    explanation: "tRNA (transfer RNA) carries specific amino acids to ribosomes during translation."
+                },
+                {
+                    question: "The lac operon is an example of:",
+                    options: ["Positive regulation", "Negative regulation", "Post-transcriptional regulation", "Translational control"],
+                    correct: 1,
+                    explanation: "Lac operon shows negative regulation by repressor protein blocking transcription."
+                },
+                {
+                    question: "In prokaryotes, transcription and translation occur:",
+                    options: ["Sequentially", "Simultaneously", "In nucleus", "Never together"],
+                    correct: 1,
+                    explanation: "In prokaryotes, both processes occur simultaneously in the cytoplasm."
+                },
+                {
+                    question: "The sugar present in RNA is:",
+                    options: ["Glucose", "Deoxyribose", "Ribose", "Fructose"],
+                    correct: 2,
+                    explanation: "RNA contains ribose sugar (with 2'-OH group), unlike DNA's deoxyribose."
+                },
+                {
+                    question: "Okazaki fragments are formed during:",
+                    options: ["Transcription", "Translation", "DNA replication", "RNA processing"],
+                    correct: 2,
+                    explanation: "Okazaki fragments are short DNA segments on the lagging strand during replication."
+                },
+                {
+                    question: "The human genome project was completed in:",
+                    options: ["2001", "2003", "2005", "2010"],
+                    correct: 1,
+                    explanation: "Human Genome Project was completed in 2003, mapping all human genes."
+                },
+                {
+                    question: "DNA fingerprinting is based on:",
+                    options: ["Satellite DNA", "Repetitive DNA", "VNTR", "All of the above"],
+                    correct: 3,
+                    explanation: "DNA fingerprinting uses VNTRs (Variable Number Tandem Repeats) in repetitive DNA."
+                },
+                {
+                    question: "Splicing removes which sequences from RNA?",
+                    options: ["Exons", "Introns", "Codons", "Promoters"],
+                    correct: 1,
+                    explanation: "Splicing removes non-coding introns and joins exons to form mature mRNA."
+                },
+                {
+                    question: "The number of chromosomes in human cells is:",
+                    options: ["23", "46", "48", "44"],
+                    correct: 1,
+                    explanation: "Humans have 46 chromosomes (23 pairs) - 44 autosomes and 2 sex chromosomes."
+                },
+                {
+                    question: "Chargaff's rule states that in DNA:",
+                    options: ["A = T and G = C", "A = G and T = C", "A = C and G = T", "All are equal"],
+                    correct: 0,
+                    explanation: "Chargaff found that amount of adenine equals thymine and guanine equals cytosine."
+                },
+                {
+                    question: "The genetic code is said to be degenerate because:",
+                    options: ["Multiple codons code for same amino acid", "One codon codes for multiple amino acids", "It has stop codons", "It has start codon"],
+                    correct: 0,
+                    explanation: "Degeneracy means multiple codons can code for the same amino acid."
+                },
+                {
+                    question: "RNA primer in DNA replication is synthesized by:",
+                    options: ["DNA polymerase", "Primase", "Helicase", "Ligase"],
+                    correct: 1,
+                    explanation: "Primase synthesizes short RNA primers needed for DNA polymerase to begin synthesis."
+                }
+            ],
+            cell: [
+                {
+                    question: "Who discovered the cell?",
+                    options: ["Robert Hooke", "Leeuwenhoek", "Robert Brown", "Schleiden"],
+                    correct: 0,
+                    explanation: "Robert Hooke discovered cells in 1665 while examining cork under microscope."
+                },
+                {
+                    question: "The cell theory was proposed by:",
+                    options: ["Schleiden and Schwann", "Watson and Crick", "Darwin", "Mendel"],
+                    correct: 0,
+                    explanation: "Schleiden and Schwann (1838-39) proposed that all organisms are made of cells."
+                },
+                {
+                    question: "Which organelle is called the powerhouse of the cell?",
+                    options: ["Chloroplast", "Mitochondria", "Ribosome", "Nucleus"],
+                    correct: 1,
+                    explanation: "Mitochondria generate ATP through cellular respiration, providing energy for cells."
+                },
+                {
+                    question: "The cell membrane is composed of:",
+                    options: ["Lipids only", "Proteins only", "Lipids and proteins", "Carbohydrates only"],
+                    correct: 2,
+                    explanation: "Cell membrane is made of phospholipid bilayer with embedded proteins."
+                },
+                {
+                    question: "Which organelle contains its own DNA?",
+                    options: ["Golgi apparatus", "Mitochondria", "Lysosome", "Peroxisome"],
+                    correct: 1,
+                    explanation: "Mitochondria and chloroplasts have their own circular DNA, supporting endosymbiotic theory."
+                },
+                {
+                    question: "Ribosomes are the site of:",
+                    options: ["Protein synthesis", "Lipid synthesis", "Photosynthesis", "Respiration"],
+                    correct: 0,
+                    explanation: "Ribosomes are the cellular machinery for protein synthesis (translation)."
+                },
+                {
+                    question: "The longest phase of cell cycle is:",
+                    options: ["Prophase", "Metaphase", "Interphase", "Telophase"],
+                    correct: 2,
+                    explanation: "Interphase (G1, S, G2) is the longest phase where cell grows and replicates DNA."
+                },
+                {
+                    question: "DNA replication occurs during which phase?",
+                    options: ["G1 phase", "S phase", "G2 phase", "M phase"],
+                    correct: 1,
+                    explanation: "S phase (Synthesis phase) is when DNA replication occurs."
+                },
+                {
+                    question: "Mitosis results in how many daughter cells?",
+                    options: ["1", "2", "3", "4"],
+                    correct: 1,
+                    explanation: "Mitosis produces two genetically identical diploid daughter cells."
+                },
+                {
+                    question: "The process of cell division in reproductive cells is called:",
+                    options: ["Mitosis", "Meiosis", "Amitosis", "Binary fission"],
+                    correct: 1,
+                    explanation: "Meiosis is reduction division producing four haploid gametes from diploid cell."
+                },
+                {
+                    question: "Lysosomes contain:",
+                    options: ["Lipids", "Nucleic acids", "Digestive enzymes", "Pigments"],
+                    correct: 2,
+                    explanation: "Lysosomes contain hydrolytic enzymes for intracellular digestion."
+                },
+                {
+                    question: "The fluid mosaic model describes the structure of:",
+                    options: ["Nucleus", "Cell membrane", "Cytoplasm", "Mitochondria"],
+                    correct: 1,
+                    explanation: "Singer and Nicolson proposed fluid mosaic model for cell membrane structure."
+                },
+                {
+                    question: "Crossing over occurs during:",
+                    options: ["Mitosis", "Meiosis I", "Meiosis II", "Interphase"],
+                    correct: 1,
+                    explanation: "Crossing over (genetic recombination) occurs during prophase I of meiosis."
+                },
+                {
+                    question: "The term 'chromosome' was coined by:",
+                    options: ["Waldeyer", "Sutton", "Morgan", "Mendel"],
+                    correct: 0,
+                    explanation: "Waldeyer coined the term 'chromosome' in 1888."
+                },
+                {
+                    question: "Centrioles are present in:",
+                    options: ["Plant cells only", "Animal cells only", "Both plant and animal cells", "Bacterial cells"],
+                    correct: 1,
+                    explanation: "Centrioles are found in animal cells and help in spindle formation during cell division."
+                },
+                {
+                    question: "The nucleolus is the site of:",
+                    options: ["DNA replication", "Ribosome synthesis", "Protein synthesis", "Lipid synthesis"],
+                    correct: 1,
+                    explanation: "Nucleolus synthesizes ribosomal RNA and assembles ribosomal subunits."
+                },
+                {
+                    question: "Plastids are found in:",
+                    options: ["Animal cells", "Plant cells", "Bacterial cells", "Fungal cells"],
+                    correct: 1,
+                    explanation: "Plastids (chloroplasts, chromoplasts, leucoplasts) are unique to plant cells."
+                },
+                {
+                    question: "The cell wall of plant cells is made of:",
+                    options: ["Chitin", "Cellulose", "Peptidoglycan", "Protein"],
+                    correct: 1,
+                    explanation: "Plant cell walls are primarily composed of cellulose fibers."
+                },
+                {
+                    question: "Meiosis results in how many daughter cells?",
+                    options: ["1", "2", "3", "4"],
+                    correct: 3,
+                    explanation: "Meiosis produces four haploid (n) daughter cells from one diploid (2n) cell."
+                },
+                {
+                    question: "The spindle fibers attach to chromosomes at:",
+                    options: ["Centromere", "Telomere", "Chromatid", "Chromatin"],
+                    correct: 0,
+                    explanation: "Spindle fibers attach to the kinetochore at the centromere of chromosomes."
+                },
+                {
+                    question: "Which phase follows prophase in mitosis?",
+                    options: ["Anaphase", "Metaphase", "Telophase", "Interphase"],
+                    correct: 1,
+                    explanation: "The order is: Prophase → Metaphase → Anaphase → Telophase."
+                },
+                {
+                    question: "Cytokinesis in plant cells occurs by:",
+                    options: ["Cleavage furrow", "Cell plate formation", "Budding", "Binary fission"],
+                    correct: 1,
+                    explanation: "Plant cells form a cell plate (phragmoplast) during cytokinesis due to rigid cell wall."
+                },
+                {
+                    question: "The endomembrane system includes:",
+                    options: ["ER, Golgi, lysosomes", "Mitochondria and chloroplasts", "Ribosomes", "Cytoskeleton"],
+                    correct: 0,
+                    explanation: "Endomembrane system includes ER, Golgi apparatus, lysosomes, and vacuoles."
+                },
+                {
+                    question: "Which structure regulates the entry and exit of materials in cells?",
+                    options: ["Cell wall", "Plasma membrane", "Cytoplasm", "Nucleus"],
+                    correct: 1,
+                    explanation: "Plasma membrane is selectively permeable, controlling substance movement."
+                },
+                {
+                    question: "The term 'protoplasm' refers to:",
+                    options: ["Cytoplasm only", "Nucleus only", "Cytoplasm + Nucleus", "Cell membrane"],
+                    correct: 2,
+                    explanation: "Protoplasm is the living content of cell, including cytoplasm and nucleus."
+                }
+            ]
+        };
+
+        // State variables
+        let currentTopic = '';
+        let questionCount = 0;
+        let selectedQuestionCount = 0;
+        let timerMinutes = 0;
+        let timeRemaining = 0;
+        let timerInterval = null;
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+        let selectedAnswer = null;
+        let answered = false;
+        let currentQuestions = [];
+        let questionStartTime = 0;
+        let questionTimes = [];
+
+        // Page elements
+        const topicPage = document.getElementById('topicPage');
+        const countPage = document.getElementById('countPage');
+        const timerPage = document.getElementById('timerPage');
+        const quizPage = document.getElementById('quizPage');
+        const resultsPage = document.getElementById('resultsPage');
+
+        function selectTopic(topic) {
+            currentTopic = topic;
+            topicPage.classList.add('hidden');
+            countPage.classList.remove('hidden');
+            
+            // Update button theme
+            const buttons = document.querySelectorAll('.count-btn');
+            buttons.forEach(btn => {
+                btn.className = 'count-btn';
+                btn.classList.add(`${topic}-theme`);
+            });
+        }
+
+        function backToTopics() {
+            countPage.classList.add('hidden');
+            topicPage.classList.remove('hidden');
+            currentTopic = '';
+        }
+
+        function selectQuestionCount(count) {
+            selectedQuestionCount = count;
+            countPage.classList.add('hidden');
+            timerPage.classList.remove('hidden');
+            
+            // Update timer page button theme
+            const buttons = document.querySelectorAll('#timerPage .count-btn');
+            buttons.forEach(btn => {
+                btn.className = 'count-btn';
+                btn.classList.add(`${currentTopic}-theme`);
+            });
+        }
+
+        function backToQuestionCount() {
+            timerPage.classList.add('hidden');
+            countPage.classList.remove('hidden');
+        }
+
+        function startQuiz(minutes) {
+            timerMinutes = minutes;
+            timeRemaining = minutes * 60; // Convert to seconds
+            questionCount = selectedQuestionCount;
+            currentQuestions = quizData[currentTopic].slice(0, selectedQuestionCount);
+            
+            timerPage.classList.add('hidden');
+            quizPage.classList.remove('hidden');
+            
+            document.getElementById('totalQuestions').textContent = selectedQuestionCount;
+            
+            startTimer();
+            loadQuestion();
+        }
+
+        function startTimer() {
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert('Time is up! Submitting quiz...');
+                    showResults();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('timeLeft').textContent = timeString;
+            
+            // Change color when time is running out
+            const timerDisplay = document.getElementById('timeLeft');
+            if (timeRemaining <= 60) {
+                timerDisplay.style.color = '#ef4444';
+            } else if (timeRemaining <= 300) {
+                timerDisplay.style.color = '#f59e0b';
+            }
+        }
+
+        function loadQuestion() {
+            const question = currentQuestions[currentQuestionIndex];
+            
+            // Start timing for this question
+            questionStartTime = Date.now();
+            
+            document.getElementById('questionNumber').textContent = `Question ${currentQuestionIndex + 1}`;
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('questionText').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index, optionDiv);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('explanation').classList.add('hidden');
+            document.getElementById('submitBtn').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('submitBtn').disabled = true;
+            
+            selectedAnswer = null;
+            answered = false;
+        }
+
+        function selectOption(index, element) {
+            if (answered) return;
+            
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+            selectedAnswer = index;
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        function submitAnswer() {
+            if (selectedAnswer === null || answered) return;
+            
+            answered = true;
+            
+            // Calculate time taken for this question
+            const timeTaken = Math.round((Date.now() - questionStartTime) / 1000); // in seconds
+            questionTimes.push({
+                questionNumber: currentQuestionIndex + 1,
+                timeTaken: timeTaken,
+                correct: selectedAnswer === currentQuestions[currentQuestionIndex].correct
+            });
+            
+            const question = currentQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach((option, index) => {
+                option.classList.add('disabled');
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                }
+                if (index === selectedAnswer && selectedAnswer !== question.correct) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            // NEET Scoring: +4 for correct, -1 for incorrect
+            if (selectedAnswer === question.correct) {
+                score += 4;
+                correctAnswers++;
+            } else {
+                score -= 1;
+                incorrectAnswers++;
+            }
+            
+            document.getElementById('currentScore').textContent = score;
+            
+            const explanation = document.getElementById('explanation');
+            const minutes = Math.floor(timeTaken / 60);
+            const seconds = timeTaken % 60;
+            let timeString = '';
+            if (minutes > 0) {
+                timeString = `${minutes} min ${seconds} sec`;
+            } else {
+                timeString = `${seconds} sec`;
+            }
+            
+            explanation.innerHTML = `
+                <strong>Time Taken:</strong> ${timeString}<br><br>
+                <strong>Explanation:</strong> ${question.explanation}
+            `;
+            explanation.classList.remove('hidden');
+            
+            document.getElementById('submitBtn').classList.add('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < currentQuestions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            // Clear the timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            quizPage.classList.add('hidden');
+            resultsPage.classList.remove('hidden');
+            
+            const finalScoreEl = document.getElementById('finalScore');
+            const percentage = (correctAnswers / currentQuestions.length) * 100;
+            
+            finalScoreEl.textContent = score;
+            
+            if (percentage >= 90) {
+                finalScoreEl.className = 'final-score excellent';
+            } else if (percentage >= 70) {
+                finalScoreEl.className = 'final-score good';
+            } else if (percentage >= 50) {
+                finalScoreEl.className = 'final-score average';
+            } else {
+                finalScoreEl.className = 'final-score poor';
+            }
+            
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('incorrectCount').textContent = incorrectAnswers;
+            document.getElementById('totalQuestionsResult').textContent = currentQuestions.length;
+            
+            let message = '';
+            if (percentage >= 90) {
+                message = '🌟 Outstanding! You have excellent mastery of the topic!';
+            } else if (percentage >= 70) {
+                message = '💪 Great job! You have a strong understanding. Keep practicing!';
+            } else if (percentage >= 50) {
+                message = '📚 Good effort! Review the explanations to strengthen your concepts.';
+            } else {
+                message = '🎯 Keep practicing! Go through the topics again and retake the quiz.';
+            }
+            
+            document.getElementById('resultMessage').textContent = message;
+            
+            // Calculate time statistics
+            displayTimeStatistics();
+            
+            // Create pie chart
+            createPieChart();
+        }
+
+        function displayTimeStatistics() {
+            // Calculate total time
+            const totalSeconds = questionTimes.reduce((sum, q) => sum + q.timeTaken, 0);
+            const totalMinutes = Math.floor(totalSeconds / 60);
+            const remainingSeconds = totalSeconds % 60;
+            document.getElementById('totalTime').textContent = `${totalMinutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+            
+            // Calculate average time
+            const avgSeconds = Math.round(totalSeconds / questionTimes.length);
+            document.getElementById('avgTime').textContent = `${avgSeconds} sec`;
+            
+            // Find fastest and slowest
+            const times = questionTimes.map(q => q.timeTaken);
+            const fastest = Math.min(...times);
+            const slowest = Math.max(...times);
+            const fastestQ = questionTimes.find(q => q.timeTaken === fastest);
+            const slowestQ = questionTimes.find(q => q.timeTaken === slowest);
+            
+            document.getElementById('fastestTime').textContent = `Q${fastestQ.questionNumber}: ${fastest} sec`;
+            document.getElementById('slowestTime').textContent = `Q${slowestQ.questionNumber}: ${slowest} sec`;
+            
+            // Display detailed list
+            const timesList = document.getElementById('timesList');
+            timesList.innerHTML = '';
+            
+            questionTimes.forEach(qt => {
+                const div = document.createElement('div');
+                div.className = 'time-item';
+                
+                if (qt.timeTaken === fastest) {
+                    div.classList.add('fastest');
+                } else if (qt.timeTaken === slowest) {
+                    div.classList.add('slowest');
+                }
+                
+                const label = document.createElement('div');
+                label.className = 'time-item-label';
+                
+                const icon = qt.correct ? '✅' : '❌';
+                label.innerHTML = `<span>${icon}</span> <span>Question ${qt.questionNumber}</span>`;
+                
+                const value = document.createElement('div');
+                value.className = 'time-item-value';
+                
+                const minutes = Math.floor(qt.timeTaken / 60);
+                const seconds = qt.timeTaken % 60;
+                if (minutes > 0) {
+                    value.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                } else {
+                    value.textContent = `${seconds} sec`;
+                }
+                
+                div.appendChild(label);
+                div.appendChild(value);
+                timesList.appendChild(div);
+            });
+        }
+
+        function createPieChart() {
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            
+            // Destroy previous chart if it exists
+            if (window.resultsChartInstance) {
+                window.resultsChartInstance.destroy();
+            }
+            
+            window.resultsChartInstance = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Correct', 'Incorrect'],
+                    datasets: [{
+                        data: [correctAnswers, incorrectAnswers],
+                        backgroundColor: ['#22c55e', '#ef4444'],
+                        borderColor: ['#ffffff', '#ffffff'],
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 14,
+                                    family: 'Poppins'
+                                },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    const total = correctAnswers + incorrectAnswers;
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function restartQuiz() {
+            // Clear timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            
+            // Reset all variables
+            currentTopic = '';
+            questionCount = 0;
+            selectedQuestionCount = 0;
+            timerMinutes = 0;
+            timeRemaining = 0;
+            currentQuestionIndex = 0;
+            score = 0;
+            correctAnswers = 0;
+            incorrectAnswers = 0;
+            selectedAnswer = null;
+            answered = false;
+            currentQuestions = [];
+            questionStartTime = 0;
+            questionTimes = [];
+            
+            // Show topic page
+            resultsPage.classList.add('hidden');
+            topicPage.classList.remove('hidden');
+            
+            // Reset score display
+            document.getElementById('currentScore').textContent = '0';
+        }
+
+        // Event listeners
+        document.getElementById('submitBtn').onclick = submitAnswer;
+        document.getElementById('nextBtn').onclick = nextQuestion;
+    </script>
+</body>
+</html>
